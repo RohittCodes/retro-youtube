@@ -3,17 +3,15 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, TrendingUp, Gamepad, Music, Clock, ThumbsUp, Folder, Menu } from 'lucide-react'
+import { Home, TrendingUp, Clock, ThumbsUp, Folder, Menu } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 
 const sidebarItems = [
   { icon: Home, label: 'Home', href: '/' },
   { icon: TrendingUp, label: 'Trending', href: '/trending' },
-  { icon: Gamepad, label: 'Gaming', href: '/gaming' },
-  { icon: Music, label: 'Music', href: '/music' },
+  { icon: Folder, label: 'Collections', href: '/collections' },
   { icon: Clock, label: 'History', href: '/history' },
   { icon: ThumbsUp, label: 'Liked Videos', href: '/liked' },
-  { icon: Folder, label: 'Collections', href: '/collections' },
 ]
 
 export default function Sidebar() {

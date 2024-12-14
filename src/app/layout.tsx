@@ -3,6 +3,8 @@ import "./globals.css";
 import CustomCursor from '@/components/globals/custom-cursor'
 import RetroHeader from '@/components/globals/retro-header'
 import Sidebar from '@/components/globals/sidebar'
+import { SessionProvider } from "next-auth/react";
+import { auth } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -10,14 +12,17 @@ export const metadata: Metadata = {
 };
 
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const session = await auth();
+
   return (
     <html lang="en">
       <body>
+        <SessionProvider session={session}>
         <CustomCursor />
         <div className="layout-container">
           <div className="sticky-header">
@@ -30,6 +35,7 @@ export default function RootLayout({
             </div>
           </div>
         </div>
+        </SessionProvider>
       </body>
     </html>
   )
