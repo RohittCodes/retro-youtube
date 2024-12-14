@@ -1,101 +1,23 @@
-import Image from "next/image";
+import VideoList from '@/components/globals/video-list'
+
+const videos = [
+  { id: 1, title: "Retro Wave Music Mix 2023", channel: "SynthMaster", views: "1.2M views", timestamp: "2 days ago", thumbnail: "/placeholder.svg?height=180&width=320&text=Retro+Wave" },
+  { id: 2, title: "80s Fashion Lookbook", channel: "VintageVibes", views: "800K views", timestamp: "1 week ago", thumbnail: "/placeholder.svg?height=180&width=320&text=80s+Fashion" },
+  { id: 3, title: "Synthwave Production Tutorial", channel: "RetroBeats", views: "500K views", timestamp: "3 days ago", thumbnail: "/placeholder.svg?height=180&width=320&text=Synthwave" },
+  { id: 4, title: "Pac-Man World Record Speedrun", channel: "RetroGamer", views: "1M views", timestamp: "5 days ago", thumbnail: "/placeholder.svg?height=180&width=320&text=Pac-Man" },
+  { id: 5, title: "Top 10 80s Hits Countdown", channel: "RetroRadio", views: "2M views", timestamp: "1 month ago", thumbnail: "/placeholder.svg?height=180&width=320&text=80s+Hits" },
+  { id: 6, title: "Retro Console Repair Guide", channel: "TechNostalgia", views: "300K views", timestamp: "2 weeks ago", thumbnail: "/placeholder.svg?height=180&width=320&text=Console+Repair" },
+  { id: 7, title: "VHS Effect Tutorial for Video Editors", channel: "RetroFX", views: "750K views", timestamp: "4 days ago", thumbnail: "/placeholder.svg?height=180&width=320&text=VHS+Effect" },
+  { id: 8, title: "Vinyl Record Collecting Guide", channel: "AnalogAudio", views: "400K views", timestamp: "6 days ago", thumbnail: "/placeholder.svg?height=180&width=320&text=Vinyl" },
+]
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+    <main className="p-6">
+      <h1 className="retro-heading text-3xl mb-6 glitch" data-text="Recommended">Recommended</h1>
+      <p className="retro-text mb-4">Welcome to RetroTube, your portal to nostalgic content!</p>
+      <VideoList videos={videos} title="Recommended Videos" />
+    </main>
+  )
 }
+

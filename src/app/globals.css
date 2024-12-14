@@ -1,27 +1,210 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --retro-bg: #0c0c0c;
+  --retro-text: #e0e0e0;
+  --retro-primary: #ff00ff;
+  --retro-secondary: #00ffff;
+  --retro-accent: #ffff00;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'VT323', monospace;
+  background-color: var(--retro-bg);
+  color: var(--retro-text);
+  cursor: none;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+.custom-cursor {
+  pointer-events: none;
+  position: fixed;
+  z-index: 9999;
+  width: 15px;
+  height: 15px;
+  background-color: var(--retro-primary);
+  border: 2px solid var(--retro-primary);
+  border-radius: 50%;
+  transition: transform 0.1s ease, background-color 0.3s ease;
+}
+
+.custom-cursor.clicked {
+  transform: scale(0.9);
+  background-color: var(--retro-secondary);
+}
+
+.retro-container {
+  background-color: #1a1a1a;
+  border: 1px solid var(--retro-primary);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.retro-container:hover {
+  box-shadow: 0 0 10px var(--retro-primary);
+}
+
+.retro-button {
+  background-color: var(--retro-primary);
+  color: var(--retro-bg);
+  border: none;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: none;
+  transition: all 0.3s;
+}
+
+.retro-button:hover {
+  background-color: var(--retro-secondary);
+  color: var(--retro-bg);
+  box-shadow: 0 0 10px var(--retro-secondary);
+}
+
+.retro-input {
+  background-color: #1a1a1a;
+  color: var(--retro-text);
+  border: 1px solid var(--retro-primary);
+  padding: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.retro-input:focus {
+  outline: none;
+  box-shadow: 0 0 10px var(--retro-primary);
+}
+
+.retro-input::placeholder {
+  color: rgba(224, 224, 224, 0.5);
+}
+
+.retro-heading {
+  font-family: 'Press Start 2P', cursive;
+  color: var(--retro-secondary);
+  text-shadow: 2px 2px var(--retro-primary);
+  letter-spacing: 2px;
+}
+
+.retro-text {
+  font-family: 'VT323', monospace;
+  color: var(--retro-text);
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+.glitch {
+  position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch::before {
+  left: 2px;
+  text-shadow: -2px 0 var(--retro-primary);
+  clip: rect(24px, 550px, 90px, 0);
+  animation: glitch-anim 3s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+  left: -2px;
+  text-shadow: -2px 0 var(--retro-secondary);
+  clip: rect(85px, 550px, 140px, 0);
+  animation: glitch-anim 2s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+  0% {
+    clip: rect(51px, 9999px, 57px, 0);
+  }
+  50% {
+    clip: rect(85px, 9999px, 79px, 0);
+  }
+  100% {
+    clip: rect(67px, 9999px, 91px, 0);
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--retro-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--retro-primary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--retro-secondary);
+}
+
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.content-container {
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 64px; /* Adjust this value based on your header height */
+}
+
+.sticky-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+}
+
+/* Responsive sidebar styles */
+.sidebar {
+  width: 240px;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -240px;
+    top: 56px;
+    bottom: 0;
+    z-index: 40;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 30;
+  }
+
+  .sidebar-overlay.open {
+    display: block;
   }
 }
