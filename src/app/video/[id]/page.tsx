@@ -12,6 +12,7 @@ import { addToHistory, updateHistoryProgress } from "@/actions/history";
 import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import CommentSection from "@/components/globals/comment-section";
 
 export default function VideoPage({ params }: { params: { id: string } }) {
   const [video, setVideo] = useState<VideoDetails | null>(null);
@@ -252,6 +253,7 @@ export default function VideoPage({ params }: { params: { id: string } }) {
               <div className="retro-container p-4 mb-4">
                 <p>{video.description}</p>
               </div>
+              <CommentSection videoId={params.id} />
             </div>
             <div className="lg:w-1/3">
               <h2 className="text-xl font-bold text-retro-secondary mb-4">

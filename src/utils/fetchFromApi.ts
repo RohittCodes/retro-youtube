@@ -5,7 +5,7 @@ export const fetchFromAPI = async (url: string, params?: string) => {
         method: 'GET',
         url: `https://yt-api.p.rapidapi.com/${url}`,
         headers: {
-          'x-rapidapi-key': '28d0a14844mshc0200a68982ea43p1ce9a8jsnbf2505ec0926',
+          'x-rapidapi-key': process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
           'x-rapidapi-host': 'yt-api.p.rapidapi.com'
         },
         params: { id: params }
