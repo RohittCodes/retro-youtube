@@ -55,9 +55,6 @@ DATABASE_URL=your_database_url
 npm run dev
 ```
 
-## Demo
-You can see the live app here: [RetroTube]()
-
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
