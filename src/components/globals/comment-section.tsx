@@ -24,11 +24,13 @@ interface CommentsResponse {
 
 export default function CommentSection({ videoId }: { videoId: string }) {
   const [comments, setComments] = useState<YouTubeComment[]>([])
+  const [displayedComments, setDisplayedComments] = useState<YouTubeComment[]>([])
   const [commentsCount, setCommentsCount] = useState<string>('0')
   const [newComment, setNewComment] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [continuation, setContinuation] = useState<string | undefined>(undefined)
+  const [visibleCommentCount, setVisibleCommentCount] = useState(20)
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -51,10 +53,15 @@ export default function CommentSection({ videoId }: { videoId: string }) {
       try {
         const response = await axios.request<CommentsResponse>(options)
         
-        setComments(prevComments => [
-          ...prevComments, 
+        const newComments = [
+          ...comments, 
           ...response.data.data
-        ])
+        ]
+        
+        setComments(newComments)
+        
+        // Initially display first 20 comments
+        setDisplayedComments(newComments.slice(0, 20))
         
         if (response.data.commentsCount) {
           setCommentsCount(response.data.commentsCount)
@@ -76,7 +83,15 @@ export default function CommentSection({ videoId }: { videoId: string }) {
   }, [videoId, continuation])
 
   const handleLoadMore = () => {
-    if (continuation) {
+    // Load next 20 comments
+    const nextVisibleCount = visibleCommentCount + 20
+    setDisplayedComments(comments.slice(0, nextVisibleCount))
+    setVisibleCommentCount(nextVisibleCount)
+    
+    // If we're approaching the end of loaded comments, trigger a fetch for more
+    if (nextVisibleCount >= comments.length && continuation) {
+      // Trigger fetching more comments using existing continuation logic
+      setContinuation(continuation)
     }
   }
 
@@ -92,7 +107,11 @@ export default function CommentSection({ videoId }: { videoId: string }) {
         replyCount: 0
       }
       
-      setComments([newCommentObj, ...comments])
+      const updatedComments = [newCommentObj, ...comments]
+      setComments(updatedComments)
+      
+      // Update displayed comments to maintain the current view
+      setDisplayedComments(updatedComments.slice(0, visibleCommentCount))
       setNewComment("")
     }
   }
@@ -138,10 +157,10 @@ export default function CommentSection({ videoId }: { videoId: string }) {
       </form>
 
       <div className="space-y-4">
-        {comments.length === 0 ? (
+        {displayedComments.length === 0 ? (
           <p className="text-retro-secondary">No comments yet</p>
         ) : (
-          comments.map((comment) => (
+          displayedComments.map((comment) => (
             <div 
               key={comment.commentId} 
               className="border border-retro-primary p-4 rounded"
@@ -151,6 +170,8 @@ export default function CommentSection({ videoId }: { videoId: string }) {
                   <Image 
                     src={comment.authorThumbnail[0].url} 
                     alt={comment.authorText}
+                    width={32}
+                    height={32}
                     className="w-8 h-8 rounded-full mr-3"
                   />
                 )}
@@ -182,13 +203,17 @@ export default function CommentSection({ videoId }: { videoId: string }) {
         )}
 
         {/* Load More Button */}
-        {continuation && (
+        {(continuation || displayedComments.length < comments.length) && (
           <div className="text-center mt-4">
             <button 
               onClick={handleLoadMore}
               className="px-4 py-2 bg-retro-accent text-retro-background rounded hover:opacity-90"
             >
-              Load More Comments
+              {displayedComments.length < comments.length 
+                ? "Load More Comments" 
+                : continuation 
+                  ? "Fetch More Comments" 
+                  : "No More Comments"}
             </button>
           </div>
         )}

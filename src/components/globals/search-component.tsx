@@ -96,6 +96,8 @@ export default function SearchComponent() {
                   src={item.thumbnail?.[0]?.url || "/placeholder-thumbnail.png"}
                   alt={item.title || "Video thumbnail"}
                   className="w-16 h-9 object-cover mr-2 rounded"
+                  width={64}
+                  height={36}
                 />
                 <div>
                   <p className="text-retro-text whitespace-normal overflow-hidden max-w-full">
