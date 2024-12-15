@@ -1,6 +1,6 @@
 # RetroTube
 
-RetroTube is a simple retro themed YouTube clone that uses free YouTube API to fetch videos. Built with Next.js, Tailwind CSS and YouTube API.
+RetroTube is a simple retro themed YouTube clone that uses free YouTube API to fetch videos. Built with Next.js, Tailwind CSS and [YouTube API](https://rapidapi.com/ytjar/api/yt-api)
 
 ## Features
 
@@ -16,7 +16,7 @@ RetroTube is a simple retro themed YouTube clone that uses free YouTube API to f
 
 - Next.js
 - Tailwind CSS
-- YouTube API
+- [YouTube API](https://rapidapi.com/ytjar/api/yt-api)
 - Prisma
 - NeonDB
 
@@ -54,9 +54,6 @@ DATABASE_URL=your_database_url
 ```bash
 npm run dev
 ```
-
-## Demo
-You can see the live app here: [RetroTube]()
 
 ## License
 
