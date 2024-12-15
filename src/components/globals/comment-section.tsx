@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import Image from 'next/image';
 
 interface YouTubeComment {
   commentId: string;
@@ -146,8 +147,8 @@ export default function CommentSection({ videoId }: { videoId: string }) {
               className="border border-retro-primary p-4 rounded"
             >
               <div className="flex items-center mb-2">
-                {comment.authorThumbnail && comment.authorThumbnail.length > 0 && (
-                  <img 
+                {comment.authorThumbnail && comment.authorThumbnail.length > 0 && comment.authorThumbnail[0].url && (
+                  <Image 
                     src={comment.authorThumbnail[0].url} 
                     alt={comment.authorText}
                     className="w-8 h-8 rounded-full mr-3"

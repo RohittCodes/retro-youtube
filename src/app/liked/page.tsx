@@ -11,15 +11,14 @@ const LikedPage = () => {
     const [loading, setLoading] = useState(true);
 
     const session = useSession();
-
-    if (!session || !session.data || !session.data.user || !session.data.user.email) {
-        return <div>Not logged in</div>;
-    }
-
-    const userEmail = session.data.user.email;
+    const userEmail = session?.data?.user?.email;
 
     useEffect(() => {
         const fetchLikedVideos = async () => {
+            if (!userEmail) {
+                setLoading(false);
+                return;
+            }
             try {
                 const response = await getLikedVideos(userEmail);
                 setLiked(response);
@@ -31,7 +30,11 @@ const LikedPage = () => {
         };
 
         fetchLikedVideos();
-    }, []);
+    }, [userEmail]);
+
+    if (!userEmail) {
+        return <div>Not logged in</div>;
+    }
 
     if (loading) {
         return (
@@ -43,14 +46,10 @@ const LikedPage = () => {
 
     return (
         <main className="p-6">
-      <h1 className="retro-heading text-3xl mb-6 glitch" data-text="Liked Videos">Liked Videos</h1>
-      {loading ? (
-                <div>Loading...</div>
-            ) : (
-                <VideoList videos={liked} />
-            )}
+            <h1 className="retro-heading text-3xl mb-6 glitch" data-text="Liked Videos">Liked Videos</h1>
+            <VideoList videos={liked} />
         </main>
-     );
-}
- 
+    );
+};
+
 export default LikedPage;

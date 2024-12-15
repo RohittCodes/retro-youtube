@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import axios from "axios";
 import Link from "next/link";
 import { VideoDetails } from "@/types/video";
+import Image from "next/image";
 
 export default function SearchComponent() {
   const [query, setQuery] = useState("");
@@ -15,32 +16,7 @@ export default function SearchComponent() {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Debounce search
-  useEffect(() => {
-    const debounceTimeout = setTimeout(() => {
-      if (query.trim()) {
-        handleSearch();
-      } else {
-        setResults([]);
-      }
-    }, 300); // Adjust debounce delay as needed
-    return () => clearTimeout(debounceTimeout);
-  }, [query]);
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setShowDropdown(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleSearch = async () => {
+  const handleSearch = useCallback(async () => {
     setIsLoading(true);
     try {
       const options = {
@@ -62,7 +38,30 @@ export default function SearchComponent() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [query]); // Include 'query' as a dependency
+
+  useEffect(() => {
+    const debounceTimeout = setTimeout(() => {
+      if (query.trim()) {
+        handleSearch();
+      } else {
+        setResults([]);
+      }
+    }, 300);
+    return () => clearTimeout(debounceTimeout);
+  }, [query, handleSearch]); // Add 'handleSearch' as a dependency
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="relative w-full" ref={dropdownRef}>
@@ -93,9 +92,9 @@ export default function SearchComponent() {
               onClick={() => setShowDropdown(false)} // Close dropdown on selection
             >
               <div className="flex items-center">
-                <img
+                <Image
                   src={item.thumbnail?.[0]?.url || "/placeholder-thumbnail.png"}
-                  alt={item.title}
+                  alt={item.title || "Video thumbnail"}
                   className="w-16 h-9 object-cover mr-2 rounded"
                 />
                 <div>
