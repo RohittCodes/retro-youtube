@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { auth } from '@/lib/auth';
 import RetroLogo from './retro-logo';
-import SignIn from '../auth/sign-in';
+import SignIn from '@/components/auth/sign-in';
 import SearchComponent from './search-component';
 import ProfileDropdown from './porfile-dropdown';
 

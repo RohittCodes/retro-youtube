@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import SignOut from '../auth/sign-out';
+import SignOut from '@/components/auth/sign-out';
 import { User } from 'lucide-react';
 
 export default function ProfileDropdown({ user }: any) {
