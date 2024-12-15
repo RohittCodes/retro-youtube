@@ -19,6 +19,14 @@ export default function Trending() {
       fetchVideos()
     }, [])
 
+    if (loading) {
+      return (
+        <div className="bg-retro-bg text-retro-text h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-retro-primary"></div>
+        </div>
+      );
+    }
+
   return (
     <div className="  bg-retro-bg text-retro-text">
       <main className="container mx-auto px-4 py-8">

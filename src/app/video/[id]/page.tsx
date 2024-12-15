@@ -5,9 +5,10 @@ import { ThumbsUp, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ReactPlayer from "react-player";
 import { VideoDetails } from "@/types/video";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { fetchFromAPI } from "@/utils/fetchFromApi";
 import { checkLike, likeVideo } from "@/actions/like";
+import { addToHistory, updateHistoryProgress } from "@/actions/history";
 import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -19,9 +20,34 @@ export default function VideoPage({ params }: { params: { id: string } }) {
   const [error, setError] = useState<string | null>(null);
   const [isLiked, setIsLiked] = useState(false);
   const [isLikeLoading, setIsLikeLoading] = useState(false);
+  
+  const [watchProgress, setWatchProgress] = useState(0);
+  const playerRef = useRef<ReactPlayer>(null);
 
   const { data: session, status: sessionStatus } = useSession();
   const user = session?.user;
+
+  useEffect(() => {
+    const addVideoToHistory = async () => {
+      if (!user || !user.email || !video) return;
+
+      try {
+        await addToHistory(params.id, user.email, {
+          title: video.title,
+          channelTitle: video.channelTitle,
+          thumbnail: video.thumbnail,
+          viewCount: video.viewCount,
+          publishedTimeText: video.publishedTimeText
+        });
+      } catch (err) {
+        console.error("Error adding video to history:", err);
+      }
+    };
+
+    if (video) {
+      addVideoToHistory();
+    }
+  }, [params.id, user, video]);
 
   useEffect(() => {
     const checkLiked = async () => {
@@ -38,7 +64,6 @@ export default function VideoPage({ params }: { params: { id: string } }) {
     checkLiked();
   }, [params.id, user]);
 
-  // Fetch video info (previous implementation remains the same)
   useEffect(() => {
     const fetchVideo = async () => {
       try {
@@ -61,7 +86,6 @@ export default function VideoPage({ params }: { params: { id: string } }) {
     fetchVideo();
   }, [params.id]);
 
-  // Fetch related videos (previous implementation remains the same)
   useEffect(() => {
     const fetchRelatedVideos = async () => {
       try {
@@ -88,7 +112,6 @@ export default function VideoPage({ params }: { params: { id: string } }) {
     alert("Link copied to clipboard");
   };
 
-  // Handle like functionality with improved state management
   const handleLike = async () => {
     if (!user || !user.email) {
       toast.error("Please log in to like videos", {
@@ -97,27 +120,21 @@ export default function VideoPage({ params }: { params: { id: string } }) {
       return;
     }
 
-    // Prevent multiple like requests
     if (isLikeLoading) return;
 
     try {
       setIsLikeLoading(true);
-
-      // Optimistically update the UI
       setIsLiked((prev) => !prev);
 
       await likeVideo(params.id, user.email);
 
-      // Success toast
       toast.success(isLiked ? "Video unliked" : "Video liked", {
         description: isLiked
           ? "You have removed your like from this video."
           : "You have liked this video.",
       });
     } catch (err) {
-      // Revert the optimistic update if there's an error
       setIsLiked((prev) => !prev);
-
       console.error("Error liking video:", err);
       toast.error("Something went wrong", {
         description: "Please try again later.",
@@ -127,7 +144,31 @@ export default function VideoPage({ params }: { params: { id: string } }) {
     }
   };
 
-  // Loading state
+  // Track video progress
+  const handleProgress = async (state: { 
+    played: number, 
+    playedSeconds: number, 
+    loaded: number,
+    loadedSeconds: number
+  }) => {
+    const progressPercentage = Math.round(state.played * 100);
+    
+    setWatchProgress(progressPercentage);
+
+    if (user && user.email) {
+      try {
+        await updateHistoryProgress(
+          params.id, 
+          user.email, 
+          Math.round(state.playedSeconds), 
+          progressPercentage
+        );
+      } catch (err) {
+        console.error("Error updating watch progress:", err);
+      }
+    }
+  };
+
   if (loading || sessionStatus === "loading") {
     return (
       <div className="bg-retro-bg text-retro-text h-screen flex items-center justify-center">
@@ -136,7 +177,6 @@ export default function VideoPage({ params }: { params: { id: string } }) {
     );
   }
 
-  // Error state
   if (error || !video) {
     return (
       <div className="bg-retro-bg text-retro-text h-screen flex items-center justify-center">
@@ -158,11 +198,18 @@ export default function VideoPage({ params }: { params: { id: string } }) {
             <div className="lg:w-2/3">
               <div className="retro-container aspect-video mb-4">
                 <ReactPlayer
+                  ref={playerRef}
                   url={`https://www.youtube.com/watch?v=${params.id}`}
                   controls
                   width="100%"
                   height="100%"
+                  onProgress={handleProgress}
                 />
+                {watchProgress > 0 && (
+                  <div className="text-sm text-retro-secondary mt-2">
+                    Watch Progress: {watchProgress}%
+                  </div>
+                )}
               </div>
               <h1 className="text-2xl font-bold text-retro-primary mb-2">
                 {video.title}

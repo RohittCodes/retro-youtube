@@ -37,6 +37,8 @@ export default function VideoList({ videos }: { videos: VideoDetails[] }) {
     return () => observer.disconnect();
   }, []);
 
+  console.log('VideoList:', videos);
+
   return (
     <div 
       ref={containerRef}
@@ -51,7 +53,7 @@ export default function VideoList({ videos }: { videos: VideoDetails[] }) {
       `}
     >
       {videos.map((video) => (
-        <Link href={`/video/${video.videoId}`} key={video.videoId} className="block">
+        <Link href={video.videoId ? `/video/${video.videoId}` : `video/${video.id}`} key={video.id || video.videoId} className="block">
           <div className="retro-container overflow-hidden group">
             <div className="relative pt-[56.25%] bg-gray-800">
               {video.thumbnail && video.thumbnail.length > 0 && video.thumbnail[0].url && (

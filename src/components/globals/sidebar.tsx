@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button"
 const sidebarItems = [
   { icon: Home, label: 'Home', href: '/' },
   { icon: TrendingUp, label: 'Trending', href: '/trending' },
-  { icon: Folder, label: 'Collections', href: '/collections' },
   { icon: Clock, label: 'History', href: '/history' },
   { icon: ThumbsUp, label: 'Liked Videos', href: '/liked' },
 ]

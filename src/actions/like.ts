@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/db";
+import axios from "axios";
 
 export const likeVideo = async (videoId: string, email: string) => {
     try {
@@ -55,3 +56,45 @@ export const checkLike = async (videoId: string, email: string) => {
         throw new Error("Something went wrong while checking if video is liked.");
     }
 };
+
+export const getLikedVideos = async (email: string) => {
+    try {
+      const likedVideos = await prisma.likes.findMany({
+        where: {
+          user: {
+            email,
+          },
+        },
+        select: {
+          videoId: true,
+        },
+      });
+  
+      if (!likedVideos || likedVideos.length === 0) {
+        return [];
+      }
+  
+      const videoDetails = await Promise.all(
+        likedVideos.map(async (like) => {
+          try {
+            const response = await axios.get('https://yt-api.p.rapidapi.com/video/info', {
+              params: { id: like.videoId },
+              headers: {
+                'x-rapidapi-key': process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
+                'x-rapidapi-host': 'yt-api.p.rapidapi.com',
+              },
+            });
+            return response.data;
+          } catch (apiError) {
+            console.error(`Error fetching video details for ID: ${like.videoId}`, apiError);
+            return null;
+          }
+        })
+      );
+  
+      return videoDetails.filter((details) => details !== null);
+    } catch (error) {
+      console.error("Error in getLikedVideos:", error);
+      throw new Error("Something went wrong while fetching liked videos.");
+    }
+  };

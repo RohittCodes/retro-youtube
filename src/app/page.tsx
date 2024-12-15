@@ -18,6 +18,14 @@ export default function Home() {
     fetchVideos()
   }, [])
 
+  if (loading) {
+    return (
+      <div className="bg-retro-bg text-retro-text h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-retro-primary"></div>
+      </div>
+    );
+  }
+
   return (
     <main className="p-6">
       <h1 className="retro-heading text-3xl mb-6 glitch" data-text="Recommended">Recommended</h1>
