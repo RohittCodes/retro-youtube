@@ -55,11 +55,20 @@ DATABASE_URL=your_database_url
 npm run dev
 ```
 
+## Demo
+You can see the live app here: [RetroTube]()
+
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
 ## Screenshots
 
-
-## Demo
+![Home Page](https://github.com/user-attachments/assets/3efecca6-bbcc-40e1-95e6-1588531912f4)
+![Trending](https://github.com/user-attachments/assets/a52caecc-880d-4126-9738-19963cc8818f)
+![Search](https://github.com/user-attachments/assets/a1cfd3ea-cc2f-447c-aae1-b62bbe4097aa)
+![Video](https://github.com/user-attachments/assets/fabe8bf1-8abc-42d2-9d3a-f8b59d9f3662)
+![Comment](https://github.com/user-attachments/assets/eb8a05c1-3c23-44b3-b988-a5b780042eeb)
+![History with no login](https://github.com/user-attachments/assets/da7b11da-8895-4401-af99-4d3a2a43754d)
+![Liked](https://github.com/user-attachments/assets/5d9033a0-55ad-4509-9174-3f3aadcb5c3a)
+![History](https://github.com/user-attachments/assets/c0eae0a8-1500-4248-b5c5-86614bc901fc)
